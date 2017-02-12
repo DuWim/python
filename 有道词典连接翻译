@@ -1,0 +1,30 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Feb 12 11:14:21 2017
+
+@author: Administrator
+"""
+
+import urllib.request
+import urllib.parse
+import json  #一种轻量级数据交互格式，相对于XML而言更简单，也易于阅读和编写，机器也方便解析和生成，Json是JavaScript中的一个子集
+
+content =input('请输入需要翻译的内容：')
+
+url ='http://fanyi.youdao.com/translate?smartresult=dict&smartresult=rule&smartresult=ugc&sessionFrom=dict2.index'
+data = {}
+data['type']='AUTO'
+data['i']= content
+data['doctype']='json'
+data['xmlVersion']='1.8'
+data['keyfrom']='fanyi.web'
+data['ue']='UTF-8'
+data['action']='FY_BY_CLICKBUTTON'
+data['typoResult']='true'
+data=urllib.parse.urlencode(data).encode('UTF-8')#转化格式
+
+response=urllib.request.urlopen(url,data)
+html=response.read().decode('UTF-8')
+
+target=json.loads(html)  #将json编码的字符串再转换为python的数据结构
+print('翻译结果：%s' % (target['translateResult'][0][0]['tgt']))
